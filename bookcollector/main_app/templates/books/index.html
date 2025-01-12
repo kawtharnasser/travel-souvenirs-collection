@@ -1,0 +1,24 @@
+{% extends 'base.html' %} 
+
+{% block content %}
+
+<h1>Book List</h1>
+
+{% for book in books %}
+<div class="card">
+  <a href="{% url 'detail' book.id %}">
+    <div class="card-content center">
+      <span class="card-title">{{book.title}}</span>
+      <div>
+        {% load static %}
+        <img src="{% static book.image|cut:'main_app/static' %}" width="100px" height="100px">
+      </div>
+      <p>Published in {{book.publication}}</p>
+      <p>Price: {{book.price}} BD</p>
+      <p>Description: <br> {{book.description}}</p>
+    </div>
+  </a>
+</div>
+{% endfor %}
+
+{% endblock %}
