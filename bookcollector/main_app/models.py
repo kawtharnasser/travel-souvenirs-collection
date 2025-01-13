@@ -21,6 +21,8 @@ class Book(models.Model):
     publication =  models.CharField(max_length=200)
     price =  models.CharField(max_length=200)
     image = models.ImageField(upload_to='main_app/static/uploads/', default="")
+    
+    genres = models.ManyToManyField(Genre)
 
     def get_absolute_url(self):
         return reverse('detail', kwargs={'book_id':self.id})

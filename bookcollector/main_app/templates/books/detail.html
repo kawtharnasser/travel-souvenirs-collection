@@ -23,11 +23,64 @@
   <div class="card-section">
     <a href="{% url 'book_update' book.id %}">Edit</a>
   </div>
-  <br>
+  <br />
   <div class="card-section">
     <a href="{% url 'book_delete' book.id %}">Delete</a>
   </div>
 </div>
+
+<hr />
+  <div class="row">
+    <div class="cl s6">
+      <h3>Book Genre</h3>
+      {% if book.genres.count %} {% for genre in book.genres.all %}
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">
+            A
+            <span style="color: {{genre.color}};">{{genre.name}}</span> Book
+          </span>
+          <div class="card-action">
+            <form action="{% url 'unassoc_genre' book.id genre.id %}" method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn">Delete</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      {% endfor %} {% else %}
+      <h5>No Genre For this Book 🥺</h5>
+      {% endif %}
+    </div>
+  </div>
+  
+  <div class="col s6">
+    <h3>Available Genres</h3>
+
+    {% if genres.count %}
+      {% for genre in genres.all %}
+      <div class="card">
+        <div class="card-content">
+          <span class="card-title">
+            <span style="color: {{ genre.color }}">{{ genre.name }} </span>
+          </span>
+          
+        </div>
+        
+        <div class="card-action">
+          <form action="{% url 'assoc_genre' book.id genre.id %}" method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn">Add</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <h5>{{ genre.name }} already has all genres available.</h5>
+    {% endif %}
+  </div>
+</div>
+
 
 <div class="col s6">
   <h4>Add a Purchase</h4>
@@ -35,6 +88,12 @@
     {% csrf_token %} {{ purchase_form.as_p }}
     <input type="submit" class="btn" value="AddPurchase" />
   </form>
+
+  
+</div>
+
+
+
 
   <h3>Purchase History</h3>
   <table class="striped">

@@ -55,9 +55,13 @@ def books_detail(request,book_id):
 
     purchase_form = PurchaseForm()
 
+    genre_book_doent_have = Genre.objects.exclude(id__in = book.genres.all().values_list('id'))
+
     return render(request, 'books/detail.html', {
         'book':book,
         'purchase_form': purchase_form,
+        'genres': genre_book_doent_have
+
     })
 
 def add_purchase(request, book_id):
@@ -66,4 +70,13 @@ def add_purchase(request, book_id):
         new_purchase = form.save(commit=False)
         new_purchase.book_id = book_id
         new_purchase.save()
+    return redirect('detail', book_id = book_id)
+
+
+def assoc_genre(request, book_id, genre_id):
+    Book.objects.get(id=book_id).genres.add(genre_id)
+    return redirect('detail', book_id = book_id)
+
+def unassoc_genre(request, book_id, genre_id):
+    Book.objects.get(id=book_id).genres.remove(genre_id)
     return redirect('detail', book_id = book_id)
