@@ -3,6 +3,17 @@ from django.urls import reverse
 from datetime import date
 # Create your models here.
 
+class Genre(models.Model):
+    name = models.CharField(max_length=100)
+    color = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name
+
+    def get_absolute_url(self):
+        return reverse('genres_detail', kwargs={'pk':self.id})
+
+
 class Book(models.Model):
     title = models.CharField(max_length=250)
     author = models.CharField(max_length=200)

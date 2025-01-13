@@ -11,7 +11,7 @@
       <span class="card-title">{{book.title}}</span>
       <div>
         {% load static %}
-        <img src="{% static book.image|cut:'main_app/static' %}" width="100px" height="100px">
+        <img src="{% static book.image|cut:'main_app/static' %}">
       </div>
       <p>Published in {{book.publication}}</p>
       <p>Price: {{book.price}} BD</p>

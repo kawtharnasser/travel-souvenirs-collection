@@ -1,7 +1,12 @@
+
 body {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
+  display: flex;
+  text-align: center;
+  background-image: url('https://www.regencyantiquebooks.com/wp-content/uploads/2019/12/how-to-sell-a-rare-book-collection.jpg');
+  
 }
 
 main {
@@ -16,4 +21,51 @@ footer.page-footer {
 .center{
   text-align: center;
   align-items: center;
+}
+
+a{
+  color: black;
+}
+
+.card-content{
+  display: flex;
+  flex-direction: column;
+  font-size: large;
+  text-align: center;
+  align-items: center;
+}
+
+.card-content img{
+  width: 400px;
+  height: 400px;
+
+}
+.card-title{
+  font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif
+}
+
+.card-section{
+  margin: 0;
+  padding: 10px;
+  text-align: center;
+  background-color: rgba(219, 48, 48, 0.921);
+  font-size: medium;
+  font-weight: bold;
+  color: white;
+}
+
+.white{
+  background-color: rgb(255, 255, 255);
+
+  border-radius: 20px;
+}
+
+form{
+  padding: 40px;
+  color: #000;
+}
+input{
+  width: 100%;
+  border: 2px solid black;
+  height: 500px;
 }

@@ -1,7 +1,8 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .models import Book
+from .models import Book, Genre
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, DetailView
 from .forms import PurchaseForm
 
 class BookCreate(CreateView):
@@ -16,10 +17,26 @@ class BookDelete(DeleteView):
     model = Book
     success_url = '/books'
 
-# class PurchaseForm(modelForm):
-#     class Meta:
-#         model = Purchase
-#         fields = ['purchase_date']
+
+# Genre Classes
+class GenreList(ListView):
+    model = Genre
+
+class GenreDetail(DetailView):
+    model = Genre
+
+class GenreCreate(CreateView):
+    model = Genre
+    fields = '__all__'
+
+class GenreUpdate(UpdateView):
+    model = Genre
+    fields = ['name', 'color']
+
+class GenreDelete(DeleteView):
+    model = Genre
+    success_url = '/genres/'
+
 
 
 # Create your views here.
@@ -46,7 +63,7 @@ def books_detail(request,book_id):
 def add_purchase(request, book_id):
     form = PurchaseForm(request.POST)
     if form.is_valid():
-        new_purchase = form.save(commit = False)
+        new_purchase = form.save(commit=False)
         new_purchase.book_id = book_id
         new_purchase.save()
     return redirect('detail', book_id = book_id)
