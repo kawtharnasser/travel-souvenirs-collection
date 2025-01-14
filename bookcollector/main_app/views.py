@@ -5,35 +5,46 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.views.generic import ListView, DetailView
 from .forms import PurchaseForm
 
-class BookCreate(CreateView):
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+
+class BookCreate(LoginRequiredMixin,CreateView):
     model = Book
     fields = ['title', 'author', 'publication', 'price', 'description', 'image']
 
-class BookUpdate(UpdateView):
+    def form_valid(self,form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+
+class BookUpdate(LoginRequiredMixin,UpdateView):
     model = Book
     fields = ['title', 'author', 'publication', 'price', 'description', 'image']
 
-class BookDelete(DeleteView):
+class BookDelete(LoginRequiredMixin,DeleteView):
     model = Book
     success_url = '/books'
 
 
 # Genre Classes
-class GenreList(ListView):
+class GenreList(LoginRequiredMixin, ListView):
     model = Genre
 
-class GenreDetail(DetailView):
+class GenreDetail(LoginRequiredMixin,DetailView):
     model = Genre
 
-class GenreCreate(CreateView):
+class GenreCreate(LoginRequiredMixin,CreateView):
     model = Genre
     fields = '__all__'
 
-class GenreUpdate(UpdateView):
+class GenreUpdate(LoginRequiredMixin,UpdateView):
     model = Genre
     fields = ['name', 'color']
 
-class GenreDelete(DeleteView):
+class GenreDelete(LoginRequiredMixin,DeleteView):
     model = Genre
     success_url = '/genres/'
 
@@ -46,10 +57,13 @@ def home(request):
 def about(request):
     return render(request, 'about.html') 
 
+@login_required
 def books_index(request):
-    books = Book.objects.all()
+    # books = Book.objects.all()
+    books = Book.objects.filter(user = request.user)
     return render(request, 'books/index.html', {'books': books})  
 
+@login_required
 def books_detail(request,book_id):
     book = Book.objects.get(id=book_id)
 
@@ -64,6 +78,7 @@ def books_detail(request,book_id):
 
     })
 
+@login_required
 def add_purchase(request, book_id):
     form = PurchaseForm(request.POST)
     if form.is_valid():
@@ -73,10 +88,28 @@ def add_purchase(request, book_id):
     return redirect('detail', book_id = book_id)
 
 
+@login_required
 def assoc_genre(request, book_id, genre_id):
     Book.objects.get(id=book_id).genres.add(genre_id)
     return redirect('detail', book_id = book_id)
 
+@login_required
 def unassoc_genre(request, book_id, genre_id):
     Book.objects.get(id=book_id).genres.remove(genre_id)
     return redirect('detail', book_id = book_id)
+
+
+def signup(request):
+    error_message = ''
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request,user)
+            return redirect('index')
+        else:
+            error_message = 'Invalid Signup- Please try again later'
+    
+    form = UserCreationForm()
+    context = {'form': form, 'error_message': error_message}
+    return render(request, 'registration/signup.html',context)

@@ -28,11 +28,23 @@
 
           <ul class="right">
             <li><a href="{% url 'about' %}">About</a></li>
+            {% if user.is_authenticated %}
             <li><a href="{% url 'book_create' %}"> Add A Book</a></li>
             <li><a href="{% url 'index' %}">View All My Books</a></li>
             <li><a href="{% url 'genres_create' %}">Add A Genre</a></li>
             <li><a href="{% url 'genres_index' %}">View All Genres</a></li>
 
+            <li>
+              <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+              </form>
+            </li>
+
+            {% else %}
+            <li><a href="{% url 'signup' %}">Sign Up</a></li>
+            <li><a href="{% url 'login' %}">Log In</a></li>
+            {% endif %}
           </ul>
         </div>
       </nav>

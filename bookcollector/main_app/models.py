@@ -1,6 +1,9 @@
 from django.db import models
 from django.urls import reverse
 from datetime import date
+
+from django.contrib.auth.models import User
+
 # Create your models here.
 
 class Genre(models.Model):
@@ -23,6 +26,7 @@ class Book(models.Model):
     image = models.ImageField(upload_to='main_app/static/uploads/', default="")
     
     genres = models.ManyToManyField(Genre)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def get_absolute_url(self):
         return reverse('detail', kwargs={'book_id':self.id})

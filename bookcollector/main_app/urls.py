@@ -20,7 +20,8 @@ urlpatterns = [
 
     #Many to Many
     path('books/<int:book_id>/assoc_genre/<int:genre_id>/', views.assoc_genre, name ='assoc_genre'),
-    path('books/<int:book_id>/unassoc_genre/<int:genre_id>/', views.unassoc_genre, name ='unassoc_genre'),    
+    path('books/<int:book_id>/unassoc_genre/<int:genre_id>/', views.unassoc_genre, name ='unassoc_genre'),
+    path('accounts/signup', views.signup, name='signup')    
     
 
 ]
